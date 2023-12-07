@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<style>
+.container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-20%) translateY(-50%);
+}
+body {
+  background-image: url('AskJerry.png');
+  background-repeat: no-repeat;
+}
+</style>
+
+<div class="container">
+<input type="text" id="searchbox" name="searchquery" value="">
+
+<div id="dropdowns">
+
+</div>
+<button onclick="myFunction()">Search</button>
+</div>
+
+<p id="demo"></p>
+
+<script>
+
+
+var projects = [
+	["Chipyard",
+	"chipyard.readthedocs.io", ["1.10.0", "1.9.1", "1.9.0", "1.8.1", "1.8.0", "1.7.1", "1.7.0", "1.6.2", "1.6.1", "1.6.0", "1.5.0", "1.4.0", "1.3.0", "1.2.0", "1.1.0", "1.0.0", "main"]
+	],
+	["FireSim",
+	"docs.fires.im", ["1.17.1", "stable"]
+	]
+];
+
+for (var i = 0; i < projects.length; i++) {
+
+   drop_name = projects[i][0]
+   dropdown_contents = drop_name + ' <select name="' + drop_name + '" id="' + drop_name +'" >';
+
+   for (var j = 0; j < projects[i][2].length; j++) {
+	dropdown_contents += "\n";
+	var temp_val = projects[i][2][j];
+	dropdown_contents += '<option value="' + temp_val + '">' + temp_val + '</option>';
+
+ }
+
+    dropdown_contents += "</select> <br>";
+
+document.getElementById("dropdowns").innerHTML += dropdown_contents;
+
+}
+
+
+function myFunction() {
+  var querystring = document.getElementById("searchbox").value + " (";
+
+
+  for (var i = 0; i < projects.length; i++) {
+	version_num = document.getElementById(projects[i][0]).value;
+        url_part = projects[i][1];
+        querystring += "site:" + url_part + "/en/" + version_num;
+
+        if (i != projects.length-1) {
+	querystring += " OR ";
+	}
+  }
+
+
+  // SPACE IS IMPORTANT
+  querystring += " )"
+
+
+  var googlequery = "https://www.google.com/search?q=";
+
+  googlequery += encodeURIComponent(querystring);
+
+
+  window.location.href = googlequery;
+}
+
+var wage = document.getElementById("searchbox");
+wage.addEventListener("keydown", function (e) {
+if (e.code === "Enter") {  //checks whether the pressed key is "Enter"
+  myFunction();
+}
+});
+
+</script>
+
+</body>
+</html>
