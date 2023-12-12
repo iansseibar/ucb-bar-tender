@@ -1,30 +1,51 @@
 <!DOCTYPE html>
 <html>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 <body>
 
 <style>
-.container {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translateX(-20%) translateY(-50%);
+.form-control:focus {
+  box-shadow: none;
 }
-body {
-  background-image: url('AskJerry.png');
-  background-repeat: no-repeat;
+
+.form-control-underlined {
+  border-width: 0;
+  border-bottom-width: 1px;
+  border-radius: 0;
+  padding-left: 0;
 }
 </style>
 
-<div class="container">
-<input type="text" id="searchbox" name="searchquery" value="">
-
-<div id="dropdowns">
+<div class="container mt-5">
+  <div class="row justify-content-center">
+      <div class="col-md-6">
+        <div class="position-relative">
+          <img src="AskJerry_cropped.png" class="img-fluid mb-4" alt="Responsive image">
+          <div class="input-group mb-4">
+              <input class="form-control" type="text" id="searchbox" aria-label="Search" placeholder="Search in all BAR documentations about...">
+              <button class="btn btn-danger" type="button " onclick="doQuery()">Ask Now</button>
+          </div>
+          <!-- <form>
+            <div class="row mb-4">
+              <div class="form-group col-md-9">
+                <input id="searchbox" type="search" placeholder="What're you searching for?" class="form-control form-control-underlined" aria-label="Search">
+              </div>
+              <div class="form-group col-md-3">
+                <button type="button" class="btn btn-danger rounded-pill btn-block shadow-sm" onclick="doQuery()">Search</button>
+              </div>
+            </div>
+          </form> -->
+        </div>
+<div id="dropdowns" class="container mt-3">
 
 </div>
-<button onclick="doQuery()">Search</button>
+<!-- <button onclick="doQuery()">Search</button> -->
 </div>
 
-<p id="demo"></p>
+<!-- <p id="demo"></p> -->
 
 <script>
 
@@ -58,18 +79,28 @@ var projects = [
 ];
 
 for (var i = 0; i < projects.length; i++) {
-  var drop_name = projects[i][0];
-  dropdown_contents = drop_name + ' <select name="' + drop_name + '" id="' + drop_name +'" >';
+    var drop_name = projects[i][0];
+    var dropdownContents = '<div class="input-group mb-3">'; // Bootstrap input group
 
-  for (var j = 0; j < projects[i][2].length; j++) {
-    dropdown_contents += "\n";
-    var temp_val = projects[i][2][j];
-    dropdown_contents += '<option value="' + temp_val + '">' + temp_val + '</option>';
-  }
+    // Bootstrap label for the dropdown
+    dropdownContents += '<div class="input-group-prepend">';
+    dropdownContents += '<label class="input-group-text" for="' + drop_name + '">' + drop_name + '</label>';
+    dropdownContents += '</div>';
 
-  dropdown_contents += "</select> <br>";
-  document.getElementById("dropdowns").innerHTML += dropdown_contents;
+    // Bootstrap styled select dropdown
+    dropdownContents += '<select class="custom-select" name="' + drop_name + '" id="' + drop_name + '">';
+    
+    for (var j = 0; j < projects[i][2].length; j++) {
+        var temp_val = projects[i][2][j];
+        dropdownContents += '<option value="' + temp_val + '">' + temp_val + '</option>';
+    }
+
+    dropdownContents += '</select>';
+    dropdownContents += '</div>'; // Close input group
+
+    document.getElementById("dropdowns").innerHTML += dropdownContents;
 }
+
 
 function doQuery() {
   var querystring = document.getElementById("searchbox").value + " (";
