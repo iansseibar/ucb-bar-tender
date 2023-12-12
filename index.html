@@ -23,10 +23,13 @@
   <div class="row justify-content-center">
       <div class="col-md-6">
         <div class="position-relative">
-          <img src="AskJerry_cropped.png" class="img-fluid mb-4" alt="Responsive image">
+          <div id="chooseHeader">
+
+          </div>
+          <!-- <img src="AskJerry_cropped.png" class="img-fluid mb-4" alt="Responsive image"> -->
           <div class="input-group mb-4">
               <input class="form-control" type="text" id="searchbox" aria-label="Search" placeholder="Search in all BAR documentations about...">
-              <button class="btn btn-danger" type="button " onclick="doQuery()">Ask Now</button>
+              <button class="btn btn-primary" type="button " onclick="doQuery()">Ask Now</button>
           </div>
           <!-- <form>
             <div class="row mb-4">
@@ -49,6 +52,16 @@
 
 <script>
 
+//choose header image
+//get url
+var url = window.location.href;
+// if it is ask jerry
+console.log(url);
+if (url.includes("askjerry")) {
+  document.getElementById("chooseHeader").innerHTML = '<img src="AskJerry_cropped.png" class="img-fluid mb-4" alt="Responsive image">'; 
+} else {
+  document.getElementById("chooseHeader").innerHTML = '<img src="https://bar.eecs.berkeley.edu/images/logo.png" class="img-fluid mb-4" alt="Responsive image">';
+}
 // TODO: add GH-issues, add mailing lists
 var projects = [
   [
@@ -84,11 +97,12 @@ for (var i = 0; i < projects.length; i++) {
 
     // Bootstrap label for the dropdown
     dropdownContents += '<div class="input-group-prepend">';
-    dropdownContents += '<label class="input-group-text" for="' + drop_name + '">' + drop_name + '</label>';
+    drop_name2 = "'" + drop_name + "'";
+    dropdownContents += '<label class="btn btn-outline-secondary" onclick="changecheckboxes('+drop_name2+')" for="' + drop_name + ' id=' + drop_name + '"> <input type="checkbox" autocomplete="off" Checked id="' + drop_name + 'checkbox"> ' + drop_name + '</label>';
     dropdownContents += '</div>';
 
     // Bootstrap styled select dropdown
-    dropdownContents += '<select class="custom-select" name="' + drop_name + '" id="' + drop_name + '">';
+    dropdownContents += '<select class="custom-select" name="' + drop_name + '" id="' + drop_name + 'dropdown">';
     
     for (var j = 0; j < projects[i][2].length; j++) {
         var temp_val = projects[i][2][j];
@@ -106,7 +120,11 @@ function doQuery() {
   var querystring = document.getElementById("searchbox").value + " (";
 
   for (var i = 0; i < projects.length; i++) {
-    version_num = document.getElementById(projects[i][0]).value;
+    enabled = document.getElementById(projects[i][0] + "checkbox").checked;
+    if (!enabled) {
+      continue;
+    }
+    version_num = document.getElementById(projects[i][0] + "dropdown").value;
     url_part = projects[i][1];
     querystring += "site:" + url_part + "/en/" + version_num;
 
@@ -130,6 +148,17 @@ wage.addEventListener("keydown", function (e) {
     doQuery();
   }
 });
+
+function changecheckboxes(name) {
+  //get the id of the button that was clicked on
+  // var id = this.id;
+  // console.log(id);
+  //get the checkbox that is associated with this button
+  var checkbox = document.getElementById(name + "checkbox");
+  //toggle the checkbox
+  checkbox.checked = !checkbox.checked;
+  // console.log(checkbox.checked);
+}
 
 </script>
 
